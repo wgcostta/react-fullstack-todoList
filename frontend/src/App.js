@@ -2,16 +2,20 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import List from "./components/List";
 import Axios from "axios";
+import Loading from "./components/Loading";
 
 const URI = "http://localhost:5000";
 
 function App() {
+  const [loading, setLoading] = useState(false);
   const [todos, setTodos] = useState([]);
 
   function getTodos() {
+    setLoading(true);
     Axios.get(`${URI}/todos`)
       .then((resposta) => setTodos(resposta.data))
-      .catch(console.log("erro ao buscar to-dos"));
+      .catch(console.log("erro ao buscar to-dos"))
+      .finally(() => setLoading(false));
   }
 
   useEffect(getTodos, []);
@@ -42,6 +46,7 @@ function App() {
 
   return (
     <div className="App">
+      <Loading status={loading} />
       <List
         items={todos}
         title="Todo list"
