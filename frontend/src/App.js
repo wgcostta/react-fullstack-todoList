@@ -17,17 +17,11 @@ function App() {
   useEffect(getTodos, []);
 
   const handleToggle = (selectedTodo) => {
-    setTodos(
-      todos.map((todo) => {
-        if (todo.id === selectedTodo.id) {
-          return {
-            ...todo,
-            done: !selectedTodo.done,
-          };
-        }
-        return todo;
-      })
-    );
+    Axios.patch(`${URI}/todos/${selectedTodo.id}`, {
+      done: !selectedTodo.done,
+    })
+      .then(getTodos)
+      .catch(console.log("erro ao atualizar to-dos"));
   };
 
   const handleAdd = (newTodo) => {
