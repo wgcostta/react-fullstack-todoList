@@ -11,7 +11,7 @@ function App() {
   function getTodos() {
     Axios.get(`${URI}/todos`)
       .then((resposta) => setTodos(resposta.data))
-      .catch(console.log("error"));
+      .catch(console.log("erro ao buscar to-dos"));
   }
 
   useEffect(getTodos, []);
@@ -31,14 +31,12 @@ function App() {
   };
 
   const handleAdd = (newTodo) => {
-    setTodos([
-      ...todos,
-      {
-        id: todos.length + 1,
-        title: newTodo,
-        done: false,
-      },
-    ]);
+    Axios.post(`${URI}/todos`, {
+      title: newTodo,
+      done: false,
+    })
+      .then(getTodos)
+      .catch(console.log("erro ao salvar to-dos"));
   };
 
   return (
