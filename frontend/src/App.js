@@ -24,6 +24,13 @@ function App() {
       .catch(console.log("erro ao atualizar to-dos"));
   };
 
+  //Criado a função caso deseje deletar.
+  function deleteTodos(selectedTodo) {
+    Axios.delete(`${URI}/todos/${selectedTodo.id}`)
+      .then(getTodos)
+      .catch(console.log("erro ao atualizar to-dos"));
+  }
+
   const handleAdd = (newTodo) => {
     Axios.post(`${URI}/todos`, {
       title: newTodo,
