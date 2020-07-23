@@ -1,32 +1,45 @@
-import React, { useState } from 'react';
-import './App.css';
-import List from './components/List';
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import List from "./components/List";
+import Axios from "axios";
+
+const URI = "http://localhost:5000";
 
 function App() {
-  const [todos, setTodos] = useState([
-    { id: 1, title: 'Wash my car', done: false },
-    { id: 2, title: 'Buy some milk', done: true },
-  ])
+  const [todos, setTodos] = useState([]);
+
+  function getTodos() {
+    Axios.get(`${URI}/todos`)
+      .then((resposta) => setTodos(resposta.data))
+      .catch(console.log("error"));
+  }
+
+  useEffect(getTodos, []);
 
   const handleToggle = (selectedTodo) => {
-    setTodos(todos.map(todo => {
-      if (todo.id === selectedTodo.id) {
-        return {
-          ...todo,
-          done: !selectedTodo.done
+    setTodos(
+      todos.map((todo) => {
+        if (todo.id === selectedTodo.id) {
+          return {
+            ...todo,
+            done: !selectedTodo.done,
+          };
         }
-      }
-      return todo
-    }))
-  }
+        return todo;
+      })
+    );
+  };
 
   const handleAdd = (newTodo) => {
-    setTodos([...todos, {
-      id: todos.length + 1,
-      title: newTodo,
-      done: false
-    }])
-  }
+    setTodos([
+      ...todos,
+      {
+        id: todos.length + 1,
+        title: newTodo,
+        done: false,
+      },
+    ]);
+  };
 
   return (
     <div className="App">
