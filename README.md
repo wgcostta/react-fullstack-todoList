@@ -13,5 +13,4 @@ Dentro de frontend:
 
 ## BackEnd:
 Dentro de backend:
-### json-server --watch db.json
-### `yarn start`
+### json-server --watch db.json --port 5000 --delay 1000
