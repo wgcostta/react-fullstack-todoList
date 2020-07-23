@@ -11,17 +11,15 @@ function App() {
   const [todos, setTodos] = useState([]);
 
   function getTodos() {
-    setLoading(true);
-    Axios.get(`${URI}/todos`)
+    return Axios.get(`${URI}/todos`)
       .then((resposta) => setTodos(resposta.data))
-      .catch(console.log("erro ao buscar to-dos"))
-      .finally(() => setLoading(false));
+      .catch(console.log("erro ao buscar to-dos"));
   }
 
   useEffect(getTodos, []);
 
-  const handleToggle = (selectedTodo) => {
-    Axios.patch(`${URI}/todos/${selectedTodo.id}`, {
+  const updateTodo = (selectedTodo) => {
+    return Axios.patch(`${URI}/todos/${selectedTodo.id}`, {
       done: !selectedTodo.done,
     })
       .then(getTodos)
@@ -29,19 +27,31 @@ function App() {
   };
 
   //Criado a função caso deseje deletar.
-  function deleteTodos(selectedTodo) {
+  function deleteTodo(selectedTodo) {
     Axios.delete(`${URI}/todos/${selectedTodo.id}`)
       .then(getTodos)
       .catch(console.log("erro ao atualizar to-dos"));
   }
 
-  const handleAdd = (newTodo) => {
+  const addTodo = (newTodo) => {
     Axios.post(`${URI}/todos`, {
       title: newTodo,
       done: false,
     })
       .then(getTodos)
       .catch(console.log("erro ao salvar to-dos"));
+  };
+
+  const handleToggle = async (selectedTodo) => {
+    setLoading(true);
+    await updateTodo(selectedTodo);
+    setLoading(false);
+  };
+
+  const handleAdd = async (newTodo) => {
+    setLoading(true);
+    await addTodo(newTodo);
+    setLoading(false);
   };
 
   return (
